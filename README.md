@@ -232,3 +232,5 @@ https://insulinet-frontend-production.up.railway.app
 ## Status
 
 Projeto em desenvolvimento e disponível em ambiente de produção no Railway.
+
+Vers�o mockada do Insulinet.
