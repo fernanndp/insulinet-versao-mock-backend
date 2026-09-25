@@ -1,12 +1,12 @@
 # Insulinet Backend
 
-API REST do **Insulinet**, uma aplicação para controle de estoque de insulina, registro de doses e estimativa de autonomia com base no histórico de consumo.
+API REST do **Insulinet**, uma aplicaÃ§Ã£o para controle de estoque de insulina, registro de doses e estimativa de autonomia com base no histÃ³rico de consumo.
 
-## Produção
+## ProduÃ§Ã£o
 
-- Frontend: https://insulinet-frontend-production.up.railway.app
-- API: https://insulinet-backend-production.up.railway.app
-- Documentação Swagger: https://insulinet-backend-production.up.railway.app/docs
+- Aplicação: https://frontend-insulinet-mock.up.railway.app
+- API: https://backend-insulinet-mock.up.railway.app
+- Documentação da API: https://backend-insulinet-mock.up.railway.app/docs
 
 ## Tecnologias
 
@@ -22,49 +22,49 @@ API REST do **Insulinet**, uma aplicação para controle de estoque de insulina,
 
 ## Funcionalidades
 
-- Cadastro e autenticação de usuários
-- Recuperação e redefinição de senha
-- Cadastro e edição de insulinas
+- Cadastro e autenticaÃ§Ã£o de usuÃ¡rios
+- RecuperaÃ§Ã£o e redefiniÃ§Ã£o de senha
+- Cadastro e ediÃ§Ã£o de insulinas
 - Controle de entradas e ajustes de estoque
 - Registro individual e em lote de doses
-- Histórico de movimentações
-- Cálculo do estoque atual
-- Estimativa de consumo médio
-- Projeção de dias restantes
-- Isolamento dos dados por usuário
+- HistÃ³rico de movimentaÃ§Ãµes
+- CÃ¡lculo do estoque atual
+- Estimativa de consumo mÃ©dio
+- ProjeÃ§Ã£o de dias restantes
+- Isolamento dos dados por usuÃ¡rio
 
 ## Estrutura
 
 ```text
 app/
-├── api/
-│   └── routes/
-│       ├── auth.py
-│       ├── doses.py
-│       ├── health.py
-│       ├── insulins.py
-│       ├── stock.py
-│       └── users.py
-├── core/
-│   ├── config.py
-│   └── security.py
-├── services/
-│   ├── dose_service.py
-│   ├── email_service.py
-│   ├── insulin_service.py
-│   ├── projection_service.py
-│   └── stock_service.py
-├── database.py
-├── main.py
-├── models.py
-└── schemas.py
+â”œâ”€â”€ api/
+â”‚   â””â”€â”€ routes/
+â”‚       â”œâ”€â”€ auth.py
+â”‚       â”œâ”€â”€ doses.py
+â”‚       â”œâ”€â”€ health.py
+â”‚       â”œâ”€â”€ insulins.py
+â”‚       â”œâ”€â”€ stock.py
+â”‚       â””â”€â”€ users.py
+â”œâ”€â”€ core/
+â”‚   â”œâ”€â”€ config.py
+â”‚   â””â”€â”€ security.py
+â”œâ”€â”€ services/
+â”‚   â”œâ”€â”€ dose_service.py
+â”‚   â”œâ”€â”€ email_service.py
+â”‚   â”œâ”€â”€ insulin_service.py
+â”‚   â”œâ”€â”€ projection_service.py
+â”‚   â””â”€â”€ stock_service.py
+â”œâ”€â”€ database.py
+â”œâ”€â”€ main.py
+â”œâ”€â”€ models.py
+â””â”€â”€ schemas.py
 ```
 
-A aplicação separa as responsabilidades entre rotas HTTP, regras de negócio, segurança, configuração e persistência.
+A aplicaÃ§Ã£o separa as responsabilidades entre rotas HTTP, regras de negÃ³cio, seguranÃ§a, configuraÃ§Ã£o e persistÃªncia.
 
-## Configuração local
+## ConfiguraÃ§Ã£o local
 
-Clone o repositório:
+Clone o repositÃ³rio:
 
 ```bash
 git clone https://github.com/fernanndp/insulinet-backend.git
@@ -87,7 +87,7 @@ python -m venv .venv
 source .venv/bin/activate
 ```
 
-Instale as dependências:
+Instale as dependÃªncias:
 
 ```bash
 pip install -r requirements.txt
@@ -133,7 +133,7 @@ API local:
 http://127.0.0.1:8000
 ```
 
-Documentação interativa:
+DocumentaÃ§Ã£o interativa:
 
 ```text
 http://127.0.0.1:8000/docs
@@ -141,7 +141,7 @@ http://127.0.0.1:8000/docs
 
 ## Principais endpoints
 
-### Autenticação
+### AutenticaÃ§Ã£o
 
 ```text
 POST /api/auth/register
@@ -150,7 +150,7 @@ POST /api/auth/forgot-password
 POST /api/auth/reset-password
 ```
 
-### Usuário
+### UsuÃ¡rio
 
 ```text
 GET /api/users/me
@@ -185,9 +185,9 @@ POST  /api/insulins/{insulin_id}/dose-batches
 
 ## Deploy
 
-O backend está hospedado no Railway com PostgreSQL gerenciado.
+O backend estÃ¡ hospedado no Railway com PostgreSQL gerenciado.
 
-Configurações principais de produção:
+ConfiguraÃ§Ãµes principais de produÃ§Ã£o:
 
 ```text
 Start Command:
@@ -197,40 +197,40 @@ Pre-deploy Command:
 alembic upgrade head
 ```
 
-As credenciais e demais valores sensíveis são configurados exclusivamente como variáveis de ambiente no Railway.
+As credenciais e demais valores sensÃ­veis sÃ£o configurados exclusivamente como variÃ¡veis de ambiente no Railway.
 
-## Segurança
+## SeguranÃ§a
 
 - Hash de senhas com Argon2
-- Tokens JWT para autenticação
-- Associação dos registros ao usuário autenticado
-- Variáveis sensíveis fora do controle de versão
-- Configuração explícita de CORS
+- Tokens JWT para autenticaÃ§Ã£o
+- AssociaÃ§Ã£o dos registros ao usuÃ¡rio autenticado
+- VariÃ¡veis sensÃ­veis fora do controle de versÃ£o
+- ConfiguraÃ§Ã£o explÃ­cita de CORS
 
 ## Roadmap
 
 - Alertas de estoque baixo com base na autonomia estimada
-- Definição de nível mínimo de segurança para reposição
-- Previsão da data recomendada para aquisição de nova unidade de insulina
-- Controle do processo de reposição diretamente pela plataforma
-- Busca de opções de compra em farmácias
-- Redirecionamento para farmácias ou páginas de compra compatíveis
-- Possível integração futura com serviços de disponibilidade e preços
+- DefiniÃ§Ã£o de nÃ­vel mÃ­nimo de seguranÃ§a para reposiÃ§Ã£o
+- PrevisÃ£o da data recomendada para aquisiÃ§Ã£o de nova unidade de insulina
+- Controle do processo de reposiÃ§Ã£o diretamente pela plataforma
+- Busca de opÃ§Ãµes de compra em farmÃ¡cias
+- Redirecionamento para farmÃ¡cias ou pÃ¡ginas de compra compatÃ­veis
+- PossÃ­vel integraÃ§Ã£o futura com serviÃ§os de disponibilidade e preÃ§os
 
-A proposta é evoluir o Insulinet de um sistema de controle de estoque para uma ferramenta capaz de antecipar a necessidade de reposição e facilitar o acesso do usuário ao medicamento.
+A proposta Ã© evoluir o Insulinet de um sistema de controle de estoque para uma ferramenta capaz de antecipar a necessidade de reposiÃ§Ã£o e facilitar o acesso do usuÃ¡rio ao medicamento.
 
 ## Frontend
 
-Código-fonte:
+CÃ³digo-fonte:
 
 https://github.com/fernanndp/insulinet-frontend
 
-Aplicação:
+AplicaÃ§Ã£o:
 
 https://insulinet-frontend-production.up.railway.app
 
 ## Status
 
-Projeto em desenvolvimento e disponível em ambiente de produção no Railway.
+Projeto em desenvolvimento e disponÃ­vel em ambiente de produÃ§Ã£o no Railway.
 
-Vers�o mockada do Insulinet.
+Versão mockada do Insulinet.
