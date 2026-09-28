@@ -4,6 +4,8 @@ from decimal import Decimal
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
 from enum import Enum
 
+from app.models import AvailabilityLevel, InsulinType
+
 class InsulinCreate(BaseModel):
     name: str = Field(min_length=1, max_length=100)
 
@@ -227,3 +229,28 @@ class InsulinUpdate(BaseModel):
     open_validity_days: int = Field(ge=1, le=180)
 
     active: bool
+
+class EstoqueUapsOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+ 
+    id_estoque: int
+    tipo: InsulinType
+    apresentacao: str
+    quantidade_disponivel: int
+    nivel_disponibilidade: AvailabilityLevel
+    lote: str
+    validade: date
+    updated_at: datetime
+ 
+ 
+class UapsOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+ 
+    id_uaps: int
+    nome: str
+    bairro: str
+    endereco: str
+    latitude: Decimal | None = None
+    longitude: Decimal | None = None
+    ativa: bool
+    estoque: list[EstoqueUapsOut] = []
