@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
-from app.api.routes import auth, doses, health, insulins, stock, users
+from app.api.routes import auth, doses, health, insulins, stock, uaps, users
 from app.core.config import CORS_ORIGINS
 
 
@@ -24,3 +23,4 @@ app.include_router(users.router)
 app.include_router(insulins.router)
 app.include_router(stock.router)
 app.include_router(doses.router)
+app.include_router(uaps.router)
