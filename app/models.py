@@ -32,6 +32,21 @@ class ContainerStatus(str, Enum):
     DISCARDED = "DISCARDED"
 
 
+class InsulinType(str, Enum):
+    REGULAR = "Regular"
+    NPH = "NPH"
+    GLARGINA = "Glargina"
+    LISPRO = "Lispro"
+
+
+class AvailabilityLevel(str, Enum):
+    ALTO = "alto"
+    MEDIO = "medio"
+    BAIXO = "baixo"
+    CRITICO = "critico"
+    INDISPONIVEL = "indisponivel"
+
+
 class User(Base):
     __tablename__ = "user_account"
 
@@ -75,13 +90,21 @@ class Insulin(Base):
     )
 
     user_id: Mapped[int] = mapped_column(
-    ForeignKey("user_account.id"),
-    nullable=False,
-)
+        ForeignKey("user_account.id"),
+        nullable=False,
+    )
 
     name: Mapped[str] = mapped_column(
         String(100),
         nullable=False,
+    )
+
+    insulin_type: Mapped[InsulinType | None] = mapped_column(
+        SqlEnum(
+            InsulinType,
+            name="insulin_type_mock",
+        ),
+        nullable=True,
     )
 
     concentration_units_per_ml: Mapped[Decimal] = mapped_column(
@@ -217,11 +240,11 @@ class StockMovement(Base):
     )
 
     occurred_time_known: Mapped[bool] = mapped_column(
-    Boolean,
-    nullable=False,
-    default=True,
-    server_default=text("true"),
-   )
+        Boolean,
+        nullable=False,
+        default=True,
+        server_default=text("true"),
+    )
 
     notes: Mapped[str | None] = mapped_column(
         String(500),
@@ -242,6 +265,7 @@ class StockMovement(Base):
         back_populates="movements",
         foreign_keys=[container_id],
     )
+
 
 class PasswordResetToken(Base):
     __tablename__ = "password_reset_token"
@@ -278,82 +302,114 @@ class PasswordResetToken(Base):
         nullable=False,
         default=lambda: datetime.now(timezone.utc),
     )
-    
-class InsulinType(str, Enum):
-    REGULAR = "Regular"
-    NPH = "NPH"
-    GLARGINA = "Glargina"
-    LISPRO = "Lispro"
- 
- 
-class AvailabilityLevel(str, Enum):
-    ALTO = "alto"
-    MEDIO = "medio"
-    BAIXO = "baixo"
-    CRITICO = "critico"
-    INDISPONIVEL = "indisponivel"
- 
- 
+
+
 class Uaps(Base):
- 
     __tablename__ = "uaps"
- 
-    id_uaps: Mapped[int] = mapped_column(primary_key=True)
- 
-    nome: Mapped[str] = mapped_column(String(120), nullable=False)
-    bairro: Mapped[str] = mapped_column(String(120), nullable=False)
-    endereco: Mapped[str] = mapped_column(String(200), nullable=False)
- 
-    latitude: Mapped[Decimal | None] = mapped_column(Numeric(9, 6), nullable=True)
-    longitude: Mapped[Decimal | None] = mapped_column(Numeric(9, 6), nullable=True)
- 
-    ativa: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
- 
+
+    id_uaps: Mapped[int] = mapped_column(
+        primary_key=True
+    )
+
+    nome: Mapped[str] = mapped_column(
+        String(120),
+        nullable=False,
+    )
+
+    bairro: Mapped[str] = mapped_column(
+        String(120),
+        nullable=False,
+    )
+
+    endereco: Mapped[str] = mapped_column(
+        String(200),
+        nullable=False,
+    )
+
+    latitude: Mapped[Decimal | None] = mapped_column(
+        Numeric(9, 6),
+        nullable=True,
+    )
+
+    longitude: Mapped[Decimal | None] = mapped_column(
+        Numeric(9, 6),
+        nullable=True,
+    )
+
+    ativa: Mapped[bool] = mapped_column(
+        Boolean,
+        nullable=False,
+        default=True,
+    )
+
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         nullable=False,
         default=lambda: datetime.now(timezone.utc),
     )
- 
+
     estoque: Mapped[list["EstoqueUaps"]] = relationship(
         back_populates="uaps",
         cascade="all, delete-orphan",
     )
- 
- 
+
+
 class EstoqueUaps(Base):
- 
     __tablename__ = "estoque_uaps"
- 
-    id_estoque: Mapped[int] = mapped_column(primary_key=True)
- 
+
+    id_estoque: Mapped[int] = mapped_column(
+        primary_key=True
+    )
+
     id_uaps: Mapped[int] = mapped_column(
         ForeignKey("uaps.id_uaps"),
         nullable=False,
         index=True,
     )
- 
+
     tipo: Mapped[InsulinType] = mapped_column(
-        SqlEnum(InsulinType, name="insulin_type_mock"),
+        SqlEnum(
+            InsulinType,
+            name="insulin_type_mock",
+        ),
         nullable=False,
     )
- 
-    apresentacao: Mapped[str] = mapped_column(String(60), nullable=False)
- 
-    quantidade_disponivel: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
- 
+
+    apresentacao: Mapped[str] = mapped_column(
+        String(60),
+        nullable=False,
+    )
+
+    quantidade_disponivel: Mapped[int] = mapped_column(
+        Integer,
+        nullable=False,
+        default=0,
+    )
+
     nivel_disponibilidade: Mapped[AvailabilityLevel] = mapped_column(
-        SqlEnum(AvailabilityLevel, name="availability_level"),
+        SqlEnum(
+            AvailabilityLevel,
+            name="availability_level",
+        ),
         nullable=False,
     )
- 
-    lote: Mapped[str] = mapped_column(String(60), nullable=False)
-    validade: Mapped[date] = mapped_column(Date, nullable=False)
- 
+
+    lote: Mapped[str] = mapped_column(
+        String(60),
+        nullable=False,
+    )
+
+    validade: Mapped[date] = mapped_column(
+        Date,
+        nullable=False,
+    )
+
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         nullable=False,
         default=lambda: datetime.now(timezone.utc),
     )
- 
-    uaps: Mapped["Uaps"] = relationship(back_populates="estoque")
+
+    uaps: Mapped["Uaps"] = relationship(
+        back_populates="estoque"
+    )

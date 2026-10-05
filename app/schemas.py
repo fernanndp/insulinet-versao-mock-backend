@@ -1,26 +1,43 @@
-from datetime import datetime, date, time 
+from datetime import date, datetime, time
 from decimal import Decimal
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
-from enum import Enum
 
 from app.models import AvailabilityLevel, InsulinType
 
+
 class InsulinCreate(BaseModel):
-    name: str = Field(min_length=1, max_length=100)
+    name: str = Field(
+        min_length=1,
+        max_length=100,
+    )
 
-    concentration_units_per_ml: Decimal = Field(gt=0)
+    insulin_type: InsulinType
 
-    container_volume_ml: Decimal = Field(gt=0)
+    concentration_units_per_ml: Decimal = Field(
+        gt=0
+    )
 
-    open_validity_days: int = Field(default=28, ge=1, le=180)
+    container_volume_ml: Decimal = Field(
+        gt=0
+    )
+
+    open_validity_days: int = Field(
+        default=28,
+        ge=1,
+        le=180,
+    )
 
 
 class InsulinResponse(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(
+        from_attributes=True
+    )
 
     id: int
     name: str
+
+    insulin_type: InsulinType | None
 
     concentration_units_per_ml: Decimal
     container_volume_ml: Decimal
@@ -31,11 +48,15 @@ class InsulinResponse(BaseModel):
 
 
 class StockInCreate(BaseModel):
-    containers: int = Field(gt=0)
+    containers: int = Field(
+        gt=0
+    )
 
 
 class StockMovementResponse(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(
+        from_attributes=True
+    )
 
     id: int
     insulin_id: int
@@ -48,13 +69,17 @@ class StockMovementResponse(BaseModel):
     created_at: datetime
     occurred_time_known: bool
 
+
 class StockSummaryResponse(BaseModel):
     insulin_id: int
     insulin_name: str
     current_stock_units: Decimal
-    
+
+
 class DoseCreate(BaseModel):
-    units: Decimal = Field(gt=0)
+    units: Decimal = Field(
+        gt=0
+    )
 
     occurred_date: date | None = None
 
@@ -65,8 +90,11 @@ class DoseCreate(BaseModel):
         max_length=500,
     )
 
+
 class DoseUpdate(BaseModel):
-    units: Decimal = Field(gt=0)
+    units: Decimal = Field(
+        gt=0
+    )
 
     occurred_date: date
 
@@ -76,9 +104,12 @@ class DoseUpdate(BaseModel):
         default=None,
         max_length=500,
     )
-    
+
+
 class StockHistoryItem(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(
+        from_attributes=True
+    )
 
     id: int
     container_id: int
@@ -88,7 +119,8 @@ class StockHistoryItem(BaseModel):
     occurred_at: datetime
     notes: str | None
     occurred_time_known: bool
-    
+
+
 class InsulinSummaryResponse(BaseModel):
     insulin_id: int
     insulin_name: str
@@ -111,8 +143,6 @@ class InsulinSummaryResponse(BaseModel):
 
     container_alert_days: int | None
 
-from pydantic import EmailStr
-
 
 class UserCreate(BaseModel):
     name: str = Field(
@@ -129,7 +159,9 @@ class UserCreate(BaseModel):
 
 
 class UserResponse(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(
+        from_attributes=True
+    )
 
     id: int
     name: str
@@ -140,7 +172,8 @@ class UserResponse(BaseModel):
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str
-    
+
+
 class ForgotPasswordRequest(BaseModel):
     email: EmailStr
 
@@ -163,12 +196,14 @@ class ResetPasswordRequest(BaseModel):
 
 class ResetPasswordResponse(BaseModel):
     message: str
-    
+
 
 class DoseBatchItem(BaseModel):
     occurred_date: date
 
-    units: Decimal = Field(gt=0)
+    units: Decimal = Field(
+        gt=0
+    )
 
     occurred_time: time | None = None
 
@@ -182,7 +217,8 @@ class DoseBatchCreate(BaseModel):
     doses: list[DoseBatchItem] = Field(
         min_length=1
     )
-    
+
+
 class StockAdjustmentCreate(BaseModel):
     actual_stock_units: Decimal = Field(
         ge=0
@@ -192,13 +228,18 @@ class StockAdjustmentCreate(BaseModel):
         min_length=3,
         max_length=500,
     )
-    
+
+
 class StockInUpdate(BaseModel):
-    units: Decimal = Field(gt=0)
+    units: Decimal = Field(
+        gt=0
+    )
 
 
 class InsulinContainerResponse(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(
+        from_attributes=True
+    )
 
     id: int
     insulin_id: int
@@ -218,6 +259,8 @@ class InsulinUpdate(BaseModel):
         max_length=100,
     )
 
+    insulin_type: InsulinType
+
     concentration_units_per_ml: Decimal = Field(
         gt=0
     )
@@ -226,13 +269,19 @@ class InsulinUpdate(BaseModel):
         gt=0
     )
 
-    open_validity_days: int = Field(ge=1, le=180)
+    open_validity_days: int = Field(
+        ge=1,
+        le=180,
+    )
 
     active: bool
 
+
 class EstoqueUapsOut(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
- 
+    model_config = ConfigDict(
+        from_attributes=True
+    )
+
     id_estoque: int
     tipo: InsulinType
     apresentacao: str
@@ -241,11 +290,13 @@ class EstoqueUapsOut(BaseModel):
     lote: str
     validade: date
     updated_at: datetime
- 
- 
+
+
 class UapsOut(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
- 
+    model_config = ConfigDict(
+        from_attributes=True
+    )
+
     id_uaps: int
     nome: str
     bairro: str
@@ -253,4 +304,7 @@ class UapsOut(BaseModel):
     latitude: Decimal | None = None
     longitude: Decimal | None = None
     ativa: bool
-    estoque: list[EstoqueUapsOut] = []
+
+    estoque: list[EstoqueUapsOut] = Field(
+        default_factory=list
+    )

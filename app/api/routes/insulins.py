@@ -35,14 +35,22 @@ def create_insulin(
     insulin = Insulin(
         user_id=current_user.id,
         name=insulin_data.name,
-        concentration_units_per_ml=insulin_data.concentration_units_per_ml,
-        container_volume_ml=insulin_data.container_volume_ml,
-        open_validity_days=insulin_data.open_validity_days,
+        insulin_type=insulin_data.insulin_type,
+        concentration_units_per_ml=(
+            insulin_data.concentration_units_per_ml
+        ),
+        container_volume_ml=(
+            insulin_data.container_volume_ml
+        ),
+        open_validity_days=(
+            insulin_data.open_validity_days
+        ),
     )
 
     db.add(insulin)
     db.commit()
     db.refresh(insulin)
+
     return insulin
 
 
@@ -56,9 +64,14 @@ def list_insulins(
 ):
     statement = (
         select(Insulin)
-        .where(Insulin.user_id == current_user.id)
-        .order_by(Insulin.id)
+        .where(
+            Insulin.user_id == current_user.id
+        )
+        .order_by(
+            Insulin.id
+        )
     )
+
     return db.scalars(statement).all()
 
 
@@ -71,16 +84,23 @@ def get_history(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    insulin = get_owned_insulin(db, insulin_id, current_user)
+    insulin = get_owned_insulin(
+        db,
+        insulin_id,
+        current_user,
+    )
 
     statement = (
         select(StockMovement)
-        .where(StockMovement.insulin_id == insulin.id)
+        .where(
+            StockMovement.insulin_id == insulin.id
+        )
         .order_by(
             StockMovement.occurred_at.desc(),
             StockMovement.id.desc(),
         )
     )
+
     return db.scalars(statement).all()
 
 
@@ -93,8 +113,16 @@ def get_insulin_summary(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    insulin = get_owned_insulin(db, insulin_id, current_user)
-    return build_insulin_summary(db, insulin)
+    insulin = get_owned_insulin(
+        db,
+        insulin_id,
+        current_user,
+    )
+
+    return build_insulin_summary(
+        db,
+        insulin,
+    )
 
 
 @router.patch(
@@ -107,7 +135,12 @@ def update_insulin(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    insulin = get_owned_insulin(db, insulin_id, current_user)
+    insulin = get_owned_insulin(
+        db,
+        insulin_id,
+        current_user,
+    )
+
     clean_name = insulin_data.name.strip()
 
     if not clean_name:
@@ -117,13 +150,23 @@ def update_insulin(
         )
 
     insulin.name = clean_name
+    insulin.insulin_type = insulin_data.insulin_type
+
     insulin.concentration_units_per_ml = (
         insulin_data.concentration_units_per_ml
     )
-    insulin.container_volume_ml = insulin_data.container_volume_ml
-    insulin.open_validity_days = insulin_data.open_validity_days
+
+    insulin.container_volume_ml = (
+        insulin_data.container_volume_ml
+    )
+
+    insulin.open_validity_days = (
+        insulin_data.open_validity_days
+    )
+
     insulin.active = insulin_data.active
 
     db.commit()
     db.refresh(insulin)
+
     return insulin
