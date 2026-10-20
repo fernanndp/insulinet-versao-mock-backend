@@ -24,7 +24,13 @@ def listar_uaps_com_disponibilidade(
             e for e in uaps.estoque
             if (tipo is None or e.tipo == tipo)
             and (apresentacao is None or e.apresentacao == apresentacao)
-            and (not apenas_disponiveis or e.nivel_disponibilidade != AvailabilityLevel.INDISPONIVEL)
+            and (
+                not apenas_disponiveis
+                or (
+                    e.nivel_disponibilidade != AvailabilityLevel.INDISPONIVEL
+                    and e.quantidade_disponivel > 0
+                )
+            )
         ]
         if estoque_filtrado:
             resultado.append((uaps, estoque_filtrado))
